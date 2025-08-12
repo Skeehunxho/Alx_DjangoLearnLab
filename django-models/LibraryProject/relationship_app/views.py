@@ -6,8 +6,6 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.decorators import user_passes_test,login_required
-from django.core.exceptions import ObjectDoesNotExist
 
 
 # Function-based view: list all books
@@ -39,12 +37,6 @@ def register(request):
     return render(request, 'relationship_app/register.html', {'form': form})
 
 # Helper functions to check user roles
-def get_user_role(user):
-    try:
-        return user.userprofile.role
-    except ObjectDoesNotExist:
-        return None
-    
 def is_admin(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
@@ -55,16 +47,20 @@ def is_member(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
 
+# Admin view
 @user_passes_test(is_admin)
 def admin_view(request):
-    return render(request, 'admin_view.html')
+    return render(request, 'relationship_app/admin_view.html')
 
+
+# Librarian view
 @user_passes_test(is_librarian)
 def librarian_view(request):
-    return render(request, 'librarian_view.html')
+    return render(request, 'relationship_app/librarian_view.html')
 
+
+# Member view
 @user_passes_test(is_member)
 def member_view(request):
-    return render(request, 'member_view.html')
-
+    return render(request, 'relationship_app/member_view.html')
 

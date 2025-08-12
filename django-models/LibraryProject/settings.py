@@ -98,3 +98,12 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Redirect after login
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
+
+# Ensure templates directory is set up
+import os
+TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'templates')]
+

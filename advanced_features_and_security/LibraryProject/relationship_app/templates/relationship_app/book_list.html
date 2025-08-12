@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book List</title>
+</head>
+<body>
+    <h1>Book List</h1>
+
+    {% if perms.relationship_app.can_add_book %}
+        <a href="{% url 'add_book' %}">Add New Book</a>
+    {% endif %}
+
+    <ul>
+        {% for book in books %}
+            <li>
+                <strong>{{ book.title }}</strong> by {{ book.author }}
+                ({{ book.published_date }})
+
+                {% if perms.relationship_app.can_change_book %}
+                    <a href="{% url 'edit_book' book.id %}">Edit</a>
+                {% endif %}
+
+                {% if perms.relationship_app.can_delete_book %}
+                    <a href="{% url 'delete_book' book.id %}">Delete</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No books available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

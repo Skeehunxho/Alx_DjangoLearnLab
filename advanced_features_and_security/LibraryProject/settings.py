@@ -145,3 +145,46 @@ MIDDLEWARE = [
     # ...
     'LibraryProject.middleware.ContentSecurityPolicyMiddleware',
 ]
+"""
+Django settings for LibraryProject project.
+
+Security-focused settings for HTTPS and secure redirects.
+ONLY enable these in production with SSL/TLS configured!
+"""
+
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# ==========================
+# SECURITY CONFIGURATIONS
+# ==========================
+
+# ❌ Make sure DEBUG = False in production
+DEBUG = False  
+
+# Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True  
+
+# Enforce HTTP Strict Transport Security (HSTS) for 1 year
+SECURE_HSTS_SECONDS = 31536000  
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  
+SECURE_HSTS_PRELOAD = True  
+
+# Secure cookies
+SESSION_COOKIE_SECURE = True  
+CSRF_COOKIE_SECURE = True  
+
+# Prevent clickjacking
+X_FRAME_OPTIONS = "DENY"  
+
+# Prevent MIME-sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True  
+
+# Enable browser XSS filter
+SECURE_BROWSER_XSS_FILTER = True  
+
+# (OPTIONAL) If you want to enforce CSP headers:
+# Install django-csp and add:
+# MIDDLEWARE += ['csp.middleware.CSPMiddleware']
+# CSP_DEFAULT_SRC = ("'self'",)

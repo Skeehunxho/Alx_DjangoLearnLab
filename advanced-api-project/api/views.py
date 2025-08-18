@@ -6,22 +6,34 @@ from .serializers import BookSerializer
 
 
 # --- BOOK CRUD VIEWS USING GENERIC VIEWS ---
+from rest_framework import generics, permissions, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import Book
+from .serializers import BookSerializer
+
+
 class BookListView(generics.ListAPIView):
+    """
+    GET: Retrieve a list of all books.
+    Includes filtering, searching, and ordering.
+    """
+
+    queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.AllowAny]
 
-    def get_queryset(self):
-        """
-        Optionally filter books by publication_year using query params.
-        Example: /api/books/?year=2020
-        """
-        queryset = Book.objects.all()
-        year = self.request.query_params.get("year")
-        if year is not None:
-            queryset = queryset.filter(publication_year=year)
-        return queryset
+    # ✅ Enable filtering, searching, ordering
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
+    # --- Filtering ---
+    filterset_fields = ["title", "author", "publication_year"]
 
+    # --- Searching ---
+    search_fields = ["title", "author__name"]  # allows text search
+
+    # --- Ordering ---
+    ordering_fields = ["title", "publication_year"]
+    ordering = ["title"]  # default order
 
 class BookDetailView(generics.RetrieveAPIView):
     """

@@ -113,4 +113,35 @@ AUTH_USER_MODEL = 'relationship_app.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False   # ✅ must be False in production
 
+# Browser security settings
+SECURE_BROWSER_XSS_FILTER = True   # Protects against XSS
+SECURE_CONTENT_TYPE_NOSNIFF = True # Prevents MIME-based attacks
+X_FRAME_OPTIONS = 'DENY'           # Prevents clickjacking
+
+# Cookies (HTTPS only)
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Content Security Policy (if using django-csp)
+# 1. Install: pip install django-csp
+# 2. Add to installed apps:
+INSTALLED_APPS += [
+    'csp',
+]
+
+MIDDLEWARE += [
+    'csp.middleware.CSPMiddleware',
+]
+
+# Define your CSP (allow only same-origin scripts/styles)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",)
+
+MIDDLEWARE = [
+    # ...
+    'LibraryProject.middleware.ContentSecurityPolicyMiddleware',
+]

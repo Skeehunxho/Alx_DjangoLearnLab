@@ -1,6 +1,6 @@
 # relationship_app/forms.py
 from django import forms
-from .models import Book
+from ..relationship_app.models import Book
 
 class BookForm(forms.ModelForm):
     class Meta:

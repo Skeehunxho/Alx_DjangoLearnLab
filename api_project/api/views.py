@@ -1,3 +1,12 @@
+"""
+Authentication & Permissions Setup:
+- TokenAuthentication is enabled via settings.py
+- Obtain tokens by POSTing username/password to /api-token-auth/
+- By default, IsAuthenticatedOrReadOnly is applied:
+  * Anyone can read (GET)
+  * Only authenticated users can write (POST/PUT/DELETE)
+"""
+
 from rest_framework import generics
 from .models import Book
 from .serializers import BookSerializer
@@ -16,10 +25,10 @@ def home(request):
         "message": "Welcome to the API 🚀. Use /api/books/ to view books."
     })
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 class BookViewSet(viewsets.ModelViewSet):
-    """
-    A viewset that provides the standard CRUD actions for Book
-    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+

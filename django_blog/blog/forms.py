@@ -9,16 +9,14 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
         
+# blog/forms.py
+from django import forms
 from .models import Post
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']  # author set in the view
-        widgets = {
-            'title': forms.TextInput(attrs={'placeholder': 'Post title'}),
-            'content': forms.Textarea(attrs={'rows': 8, 'placeholder': 'Write your post...'}),
-        }
+        fields = ['title', 'content', 'tags']  
 
 from django import forms
 from .models import Comment

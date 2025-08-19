@@ -1,6 +1,5 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 
 from .models import CustomUser
@@ -14,8 +13,10 @@ class UserListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-# ✅ Follow a user
-class FollowUserView(APIView):
+# ✅ Follow a user using GenericAPIView
+class FollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
@@ -34,8 +35,10 @@ class FollowUserView(APIView):
         )
 
 
-# ✅ Unfollow a user
-class UnfollowUserView(APIView):
+# ✅ Unfollow a user using GenericAPIView
+class UnfollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):

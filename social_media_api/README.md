@@ -175,3 +175,10 @@ social_media_api/
  Real-time notifications (via Django Channels)
 
 💡 Tip: Start testing endpoints as soon as migrations are done to make sure everything works.
+### 👥 Follow / Unfollow Users
+- **POST** `/api/accounts/users/<id>/follow/` → Follow a user
+- **POST** `/api/accounts/users/<id>/unfollow/` → Unfollow a user
+
+### 📰 Feed
+- **GET** `/api/posts/feed/`  
+Returns posts from users that the authenticated user follows, ordered by most recent.

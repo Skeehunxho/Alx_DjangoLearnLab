@@ -47,3 +47,19 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+from rest_framework import permissions, viewsets, decorators, response
+from .models import Post
+from .serializers import PostSerializer
+
+class FeedViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @decorators.action(detail=False, methods=["get"])
+    def list(self, request):
+        user = request.user
+        followed_users = user.following.all()
+        posts = Post.objects.filter(author__in=followed_users).order_by("-created_at")
+        serializer = PostSerializer(posts, many=True)
+        return response.Response(serializer.data)
+

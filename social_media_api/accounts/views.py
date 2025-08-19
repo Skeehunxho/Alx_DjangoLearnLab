@@ -36,3 +36,49 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+        
+from rest_framework import permissions, status, decorators, response, viewsets
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    @decorators.action(detail=True, methods=["post"])
+    def follow(self, request, pk=None):
+        user_to_follow = self.get_object()
+        if user_to_follow == request.user:
+            return response.Response({"error": "You cannot follow yourself."}, status=400)
+        request.user.following.add(user_to_follow)
+        return response.Response({"status": f"You are now following {user_to_follow.username}"})
+
+    @decorators.action(detail=True, methods=["post"])
+    def unfollow(self, request, pk=None):
+        user_to_unfollow = self.get_object()
+        request.user.following.remove(user_to_unfollow)
+        return response.Response({"status": f"You unfollowed {user_to_unfollow.username}"})
+        from rest_framework import permissions, status, decorators, response, viewsets
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    @decorators.action(detail=True, methods=["post"])
+    def follow(self, request, pk=None):
+        user_to_follow = self.get_object()
+        if user_to_follow == request.user:
+            return response.Response({"error": "You cannot follow yourself."}, status=400)
+        request.user.following.add(user_to_follow)
+        return response.Response({"status": f"You are now following {user_to_follow.username}"})
+
+    @decorators.action(detail=True, methods=["post"])
+    def unfollow(self, request, pk=None):
+        user_to_unfollow = self.get_object()
+        request.user.following.remove(user_to_unfollow)
+        return response.Response({"status": f"You unfollowed {user_to_unfollow.username}"})
